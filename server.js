@@ -1,6 +1,6 @@
 var port = 80;
 
-var Gun = require('../');
+var Gun = require('gun');
 
 var server = require('http').createServer(function(req, res){
 	if(Gun.serve(req, res)){ return } // filters gun requests!
