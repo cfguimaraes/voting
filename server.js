@@ -18,4 +18,4 @@ var server = http.createServer(function(req, res){
   }).pipe(res); // stream
 });
 
-server.listen(8080)
+server.listen(80)
