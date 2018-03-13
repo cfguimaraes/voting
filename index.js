@@ -1,4 +1,4 @@
-const gun = Gun(window.location + '/gun');
+const gun = Gun(window.location + 'gun');
 
       const $Input = document.querySelector('#Input');
       gun.get('test-input').val((data) => {
