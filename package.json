@@ -10,6 +10,6 @@
   "author": "Cleverton Fernandes Guimarães",
   "license": "ISC",
   "dependencies": {
-    "gun": "^0.9.96"
+    "gun": "0.9.97"
   }
 }
