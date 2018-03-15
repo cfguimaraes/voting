@@ -1,14 +1,26 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Poll App
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <ion-searchbar (ionInput)="filterCourses($event)"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let course of courses" (click)="upvote(course)">
+      {{course.name}}
+      <button ion-button item-end class="showOnHover">
+        <ion-icon name="thumbs-up"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab right bottom>
+    <button ion-fab (click)="showPromptToCreateCourse()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+
 </ion-content>
