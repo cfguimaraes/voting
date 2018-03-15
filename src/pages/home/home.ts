@@ -1,27 +1,34 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { NavController } from "ionic-angular";
 import { AlertController } from "ionic-angular/components/alert/alert-controller";
 
-import { GunProvider } from "../../providers/gun/gun";
 import { Course } from "../../models/Course";
+import { GunProvider } from "../../providers/gun/gun";
 
 @Component({
     selector: "page-home",
     templateUrl: "home.html"
 })
 export class HomePage {
-    public degrees: Course[];
+    private fromDB = new Array<Course>();
+    degrees: Course[];
 
     constructor(
         public navCtrl: NavController,
         public alertCtrl: AlertController,
-        public gun: GunProvider
+        public gun: GunProvider,
+        public zone: NgZone
     ) {
-        this.loadCourses();
+        zone.run(() =>
+            this.gun.loadCourses().subscribe(x => {
+                console.log("sub", x);
+                this.fromDB.push(x);
+            })
+        );
     }
 
-    async loadCourses() {
-        this.degrees = await this.gun.loadCourses();
+    loadCourses() {
+        this.degrees = this.fromDB;
     }
 
     insertCourse(courseName: string) {
@@ -57,15 +64,13 @@ export class HomePage {
     }
 
     async filterCourses(ev: any) {
-        await this.loadCourses();
-
         let filterValue = <string>ev.target.value.toLowerCase();
         const hasExpressionToFilter = filterValue && filterValue.trim() != "";
 
-        if (!hasExpressionToFilter) return;
+        if (!hasExpressionToFilter) this.degrees = this.fromDB;
         else {
-            this.degrees = this.degrees.sort(
-                (a, b) => (a.name > b.name ? 1 : -1)
+            this.degrees = this.fromDB.filter(
+                a => a.name.toLowerCase().indexOf(filterValue) > -1
             );
         }
     }

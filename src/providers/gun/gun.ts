@@ -3,6 +3,7 @@ import * as Gun from "gun";
 
 import { peers } from "../../config/peers";
 import { Course } from "../../models/Course";
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class GunProvider {
@@ -17,23 +18,21 @@ export class GunProvider {
         this.degrees.get(courseName).put({ name: courseName });
     }
 
-    loadCourses(): Promise<Course[]> {
-        let degrees = new Array<Course>();
-
-        return new Promise(resolve => {
+    loadCourses(): Observable<Course> {
+        return new Observable(s => {
             this.degrees.map().val((item, id) => {
-                let obj: any = { name: id };
-                degrees.push(obj);
-                obj.upvotes = [];
+                let course = new Course(id);
+                console.log("course", course);
+                s.next(course);
+                course.upvotes = [];
+
                 this.degrees
                     .get(id)
                     .get("upvotes")
                     .val((data, id) => {
-                        obj.upvotes.push(data);
+                        course.upvotes.push(data);
                     });
             });
-
-            resolve(degrees.sort((a, b) => (a.name < b.name ? -1 : 1)));
         });
     }
 
