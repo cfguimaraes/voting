@@ -3,13 +3,14 @@ import { NavController } from "ionic-angular";
 import { AlertController } from "ionic-angular/components/alert/alert-controller";
 
 import { GunProvider } from "../../providers/gun/gun";
+import { Course } from "../../models/Course";
 
 @Component({
     selector: "page-home",
     templateUrl: "home.html"
 })
 export class HomePage {
-    public courses: Array<{ name: string}>;
+    public degrees: Course[];
 
     constructor(
         public navCtrl: NavController,
@@ -19,9 +20,8 @@ export class HomePage {
         this.loadCourses();
     }
 
-    loadCourses() {
-        let value = this.gun.loadCourses();
-        this.courses=value;
+    async loadCourses() {
+        this.degrees = await this.gun.loadCourses();
     }
 
     insertCourse(courseName: string) {
@@ -56,16 +56,17 @@ export class HomePage {
         prompt.present();
     }
 
-    filterCourses(ev: any) {
-        this.loadCourses();
-        
+    async filterCourses(ev: any) {
+        await this.loadCourses();
+
         let filterValue = <string>ev.target.value.toLowerCase();
         const hasExpressionToFilter = filterValue && filterValue.trim() != "";
-        
+
         if (!hasExpressionToFilter) return;
         else {
-            this.courses.forEach(x=> console.log(x))
-            
+            this.degrees = this.degrees.sort(
+                (a, b) => (a.name > b.name ? 1 : -1)
+            );
         }
     }
 
