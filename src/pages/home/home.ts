@@ -1,9 +1,9 @@
-import { Component, NgZone } from "@angular/core";
-import { NavController } from "ionic-angular";
-import { AlertController } from "ionic-angular/components/alert/alert-controller";
+import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 
-import { Course } from "../../models/Course";
-import { GunProvider } from "../../providers/gun/gun";
+import { Course } from '../../models/Course';
+import { GunProvider } from '../../providers/gun/gun';
 
 @Component({
     selector: "page-home",
@@ -16,19 +16,22 @@ export class HomePage {
     constructor(
         public navCtrl: NavController,
         public alertCtrl: AlertController,
-        public gun: GunProvider,
-        public zone: NgZone
+        public gun: GunProvider
     ) {
-        zone.run(() =>
-            this.gun.loadCourses().subscribe(x => {
-                console.log("sub", x);
-                this.fromDB.push(x);
-            })
-        );
+        this.degrees = [];
+        this.subscribeToDegreesInGun();
     }
 
-    loadCourses() {
-        this.degrees = this.fromDB;
+    private subscribeToDegreesInGun() {
+        this.gun.loadCourses().subscribe(x => {
+            let y = this.degrees.find(y => y.name == x.name);
+            if (!y) {
+                this.degrees.push(x);
+            } else {
+                let i = this.degrees.indexOf(y);
+                this.degrees[i] = x;
+            }
+        });
     }
 
     insertCourse(courseName: string) {

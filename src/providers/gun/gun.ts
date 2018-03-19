@@ -1,43 +1,42 @@
 import { Injectable } from "@angular/core";
 import * as Gun from "gun";
+import { Observable } from "rxjs/Observable";
 
 import { peers } from "../../config/peers";
 import { Course } from "../../models/Course";
-import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class GunProvider {
     private Gun = new Gun(peers);
-    private degrees: any;
+    private db: any;
 
     constructor() {
-        this.degrees = this.Gun.get("courses1");
+        this.db = this.Gun.get("courses1");
     }
 
     insertCourse(courseName: string) {
-        this.degrees.get(courseName).put({ name: courseName });
+        this.db.get(courseName).put({ name: courseName });
     }
 
     loadCourses(): Observable<Course> {
         return new Observable(s => {
-            this.degrees.map().val((item, id) => {
-                let course = new Course(id);
-                console.log("course", course);
-                s.next(course);
-                course.upvotes = [];
-
-                this.degrees
+            this.db.map().on((item, id) => {
+                let course = new Course(item.name);
+                this.db
                     .get(id)
                     .get("upvotes")
-                    .val((data, id) => {
-                        course.upvotes.push(data);
+                    .map()
+                    .on(votes => {
+                        course.upvotes = course.upvotes || [];
+                        course.upvotes.push(votes);
                     });
+                s.next(course);
             });
         });
     }
 
     upvote(degree: Course, email: string) {
-        this.degrees
+        this.db
             .get(degree.name)
             .get("upvotes")
             .get(email)

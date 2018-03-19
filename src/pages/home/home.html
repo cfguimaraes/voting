@@ -9,7 +9,7 @@
 <ion-content padding>
   <ion-searchbar (ionInput)="filterCourses($event)"></ion-searchbar>
   <ion-list>
-    <ion-item *ngFor="let course of courses" (click)="upvote(course)">
+    <ion-item *ngFor="let course of degrees" (click)="upvote(course)">
       {{course.name}}
       <button ion-button item-end class="showOnHover">
         <ion-icon name="thumbs-up"></ion-icon>
