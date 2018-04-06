@@ -45,7 +45,7 @@ testem.log
 Thumbs.db
 
 # Information about peers should not be public versioned
-src/config/peers.ts
+# src/config/peers.ts
 
 # Ommit compiled folders
 www/*
