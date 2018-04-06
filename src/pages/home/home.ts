@@ -24,7 +24,7 @@ export class HomePage {
 
     private subscribeToDegreesInGun() {
         this.gun.loadCourses().subscribe(x => {
-            this.degrees = x;
+            this.degrees = x.sort((a, b) => (a.name > b.name ? 1 : -1));
         });
     }
 
@@ -35,8 +35,7 @@ export class HomePage {
     upvote(course: any) {
         let prompt = this.alertCtrl.create({
             title: "Votar no curso",
-            message:
-                "Digite seu email para confirmar seu voto",
+            message: "Digite seu email para confirmar seu voto",
             inputs: [
                 {
                     name: "email",
