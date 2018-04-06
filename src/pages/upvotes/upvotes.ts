@@ -21,7 +21,7 @@ export class UpvotesPage {
             this.entries = 
             x.sort(
                 (a,b) => {
-                    return a.upvotes.length - b.upvotes.length
+                    return b.upvotes.length - a.upvotes.length
                 }
             )
         });

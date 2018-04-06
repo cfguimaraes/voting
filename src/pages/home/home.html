@@ -11,7 +11,7 @@
   <ion-list>
     <ion-item *ngFor="let course of degrees" (click)="upvote(course)">
       {{course.name}}
-      <button ion-button item-end class="showOnHover">
+      <button ion-button item-end class="hideUnlessHover">
         <ion-icon name="thumbs-up"></ion-icon>
       </button>
     </ion-item>

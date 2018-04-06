@@ -1,7 +1,13 @@
-.showOnHover{
-    display: none;
-}
+page-home {
+    .hideUnlessHover {
+        display: none;
+    }
 
-ion-item:hover button{
-    display: inline;
+    ion-item:hover {
+        cursor: pointer;
+
+        button {
+            display: inline;
+        }
+    }
 }
