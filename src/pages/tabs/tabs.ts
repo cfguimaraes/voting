@@ -1,26 +1,17 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { Component } from "@angular/core";
+import { IonicPage } from "ionic-angular";
 
 import { HomePage } from "./../home/home";
-
-/**
- * Generated class for the TabsPage tabs.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { UpvotesPage } from "./../upvotes/upvotes";
 
 @IonicPage()
 @Component({
-  selector: 'page-tabs',
-  templateUrl: 'tabs.html'
+    selector: "page-tabs",
+    templateUrl: "tabs.html"
 })
 export class TabsPage {
+    votingRoot = HomePage;
+    upvotesRoot = UpvotesPage;
 
-  votingRoot = HomePage
-  upvotesRoot = 'UpvotesPage'
-
-
-  constructor(public navCtrl: NavController) {}
-
+    constructor() {}
 }

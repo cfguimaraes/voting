@@ -1,25 +1,11 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the UpvotesPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Component } from "@angular/core";
+import { IonicPage } from "ionic-angular";
 
 @IonicPage()
 @Component({
-  selector: 'page-upvotes',
-  templateUrl: 'upvotes.html',
+    selector: "page-upvotes",
+    templateUrl: "upvotes.html"
 })
 export class UpvotesPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad UpvotesPage');
-  }
-
+    constructor() {}
 }
