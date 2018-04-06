@@ -7,7 +7,7 @@ import { Course } from "../../models/Course";
 
 @Injectable()
 export class GunProvider {
-    private Gun = new Gun();
+    private Gun = new Gun(peers);
     private db: any;
     private degrees: Course[];
 
