@@ -6,5 +6,6 @@ class Course {
 
     constructor(name: string) {
         this.name = name;
+        this.upvotes = [];
     }
 }

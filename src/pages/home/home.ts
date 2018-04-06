@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { AlertController } from 'ionic-angular/components/alert/alert-controller';
+import { Component } from "@angular/core";
+import { NavController } from "ionic-angular";
+import { AlertController } from "ionic-angular/components/alert/alert-controller";
 
-import { Course } from '../../models/Course';
-import { GunProvider } from '../../providers/gun/gun';
+import { Course } from "../../models/Course";
+import { GunProvider } from "../../providers/gun/gun";
 
 @Component({
     selector: "page-home",
@@ -24,13 +24,7 @@ export class HomePage {
 
     private subscribeToDegreesInGun() {
         this.gun.loadCourses().subscribe(x => {
-            let y = this.degrees.find(y => y.name == x.name);
-            if (!y) {
-                this.degrees.push(x);
-            } else {
-                let i = this.degrees.indexOf(y);
-                this.degrees[i] = x;
-            }
+            this.degrees = x;
         });
     }
 
@@ -42,7 +36,7 @@ export class HomePage {
         let prompt = this.alertCtrl.create({
             title: "Votar no curso",
             message:
-                "Caso você faça esse curso digite o seu email para confirmar seu voto",
+                "Digite seu email para confirmar seu voto",
             inputs: [
                 {
                     name: "email",
@@ -54,7 +48,7 @@ export class HomePage {
                     text: "Cancelar"
                 },
                 {
-                    text: "Criar entrada",
+                    text: "Salvar",
                     handler: data => {
                         if (data.email && data.email.trim() != "")
                             this.gun.upvote(course, data.email);
@@ -80,12 +74,12 @@ export class HomePage {
 
     showPromptToCreateCourse() {
         let prompt = this.alertCtrl.create({
-            title: "Criar curso",
-            message: "Digite o nome do curso que não existe para ser inserido",
+            title: "Criar entrada",
+            message: "Descreva a opção a ser criada",
             inputs: [
                 {
                     name: "course",
-                    placeholder: "Curso"
+                    placeholder: "Descrição"
                 }
             ],
             buttons: [
@@ -93,7 +87,7 @@ export class HomePage {
                     text: "Cancelar"
                 },
                 {
-                    text: "Criar entrada",
+                    text: "Salvar",
                     handler: data => {
                         if (data.course && data.course.trim() != "")
                             this.insertCourse(data.course);

@@ -7,39 +7,60 @@ import { Course } from "../../models/Course";
 
 @Injectable()
 export class GunProvider {
-    private Gun = new Gun(peers);
+    private Gun = new Gun();
     private db: any;
+    private degrees: Course[];
 
     constructor() {
-        this.db = this.Gun.get("courses1");
+        this.db = this.Gun.get("courses2");
+        this.degrees = [];
     }
 
     insertCourse(courseName: string) {
         this.db.get(courseName).put({ name: courseName });
     }
 
-    loadCourses(): Observable<Course> {
+    loadCourses(): Observable<Course[]> {
         return new Observable(s => {
             this.db.map().on((item, id) => {
-                let course = new Course(item.name);
+                let degree = this.degrees.find(it => it.name == item.name);
+                if (!degree) {
+                    let course = new Course(item.name);
+                    degree = course;
+                    this.degrees.push(course);
+                } else {
+                    let i = this.degrees.indexOf(degree);
+                    this.degrees[i] = degree;
+                }
                 this.db
                     .get(id)
                     .get("upvotes")
                     .map()
-                    .on(votes => {
-                        course.upvotes = course.upvotes || [];
-                        course.upvotes.push(votes);
+                    .on((votes, email) => {
+                        this.db
+                            .get(id)
+                            .get("upvotes")
+                            .get(email)
+                            .map()
+                            .on(upvote => {
+                                if (!degree.upvotes.find(x => x == email)) {
+                                    degree.upvotes.push(email);
+                                    s.next(this.degrees);
+                                }
+                            });
                     });
-                s.next(course);
             });
+            s.next(this.degrees);
         });
     }
 
     upvote(degree: Course, email: string) {
+        let vote = {};
+        vote[email] = 1;
         this.db
             .get(degree.name)
             .get("upvotes")
             .get(email)
-            .set({ email: 1 });
+            .set(vote);
     }
 }
