@@ -25,6 +25,7 @@ export class HomePage {
     private subscribeToDegreesInGun() {
         this.gun.loadCourses().subscribe(x => {
             this.degrees = x.sort((a, b) => (a.name > b.name ? 1 : -1));
+            console.log(this.degrees);
         });
     }
 

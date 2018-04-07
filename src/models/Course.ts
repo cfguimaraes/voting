@@ -8,4 +8,8 @@ class Course {
         this.name = name;
         this.upvotes = [];
     }
+
+    sumUpvotes() {
+        return this.upvotes.map(x => x.vote).reduce((a, b) => a + b);
+    }
 }
