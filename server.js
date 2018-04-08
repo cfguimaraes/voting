@@ -1,34 +1,46 @@
-var port =
-  process.env.OPENSHIFT_NODEJS_PORT ||
-  process.env.VCAP_APP_PORT ||
-  process.env.PORT ||
-  process.argv[2] ||
-  8080;
+const port =
+    process.env.OPENSHIFT_NODEJS_PORT ||
+    process.env.VCAP_APP_PORT ||
+    process.env.PORT ||
+    process.argv[2] ||
+    8080;
 
-var Gun = require("gun");
+import { peers } from "./src/config/peers";
+const Server = require("synceddb-server");
 
-var server = require("http").createServer(function(req, res) {
-  if (Gun.serve(req, res)) {
-    return;
-  } // filters gun requests!
-  require("fs")
-    .createReadStream(require("path").join(__dirname, req.url))
-    .on("error", function() {
-      // static files!
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(
-        require("fs").readFileSync(
-          require("path").join(__dirname, "index.html") // or default to index
-        )
-      );
-    })
-    .pipe(res); // stream
+// Persistence in memory
+//const MemoryPersistence = require('synceddb-persistence-memory');
+// const memoryPersistence = require('../../persistence/memory');
+
+// Persistence with PostreSQL
+const pgPersistence = require("synceddb-persistence-postgres");
+const pgOpts = {
+    conString: peers[0]
+};
+
+// Persistence with MySQL
+//const mysqlPersistence = require('synceddb-persistence-mysql');
+//const mysqlPersistence = require('../../persistence/mysql');
+//const mysqlOpts = {
+//  host: 'localhost',
+//  user: 'synceddb',
+//  password: 'mypass',
+//  database: 'synceddb',
+//};
+
+// Persistence with CouchDB
+//const mysqlPersistence = require('synceddb-persistence-couchdb');
+//const couchdbPersistence = require('../../persistence/couchdb');
+//const couchdbOpts = {
+//  dbUrl: 'http://synceddb:mypass@localhost:5984/synceddb/',
+//};
+
+// memoryPersistence.create().then(function(p) {
+// //mysqlPersistence.create(mysqlOpts).then(function(p) {
+// //couchdbPersistence.create(couchdbOpts).then(function(p) {
+pgPersistence.create(pgOpts).then(function(p) {
+    new Server({
+        port: port,
+        store: p
+    });
 });
-
-var gun = Gun({
-  web: server
-});
-
-server.listen(port);
-
-console.log("Server started on port " + port + " with /gun");

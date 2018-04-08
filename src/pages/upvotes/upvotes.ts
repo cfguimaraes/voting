@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { IonicPage } from "ionic-angular";
 
 import { GunProvider } from "./../../providers/gun/gun";
-import { Course } from "../../models/Course";
+import { Entry } from "../../models/Course";
 
 @IonicPage()
 @Component({
@@ -10,7 +10,7 @@ import { Course } from "../../models/Course";
     templateUrl: "upvotes.html"
 })
 export class UpvotesPage {
-    public entries: Course[];
+    public entries: Entry[];
 
     constructor(public gun: GunProvider) {
         this.loadEntries();

@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { NavController } from "ionic-angular";
 import { AlertController } from "ionic-angular/components/alert/alert-controller";
 
-import { Course } from "../../models/Course";
+import { Entry } from "../../models/Course";
 import { GunProvider } from "../../providers/gun/gun";
 
 @Component({
@@ -10,13 +10,14 @@ import { GunProvider } from "../../providers/gun/gun";
     templateUrl: "home.html"
 })
 export class HomePage {
-    private fromDB = new Array<Course>();
-    degrees: Course[];
+    private fromDB = new Array<Entry>();
+    degrees: Entry[];
 
     constructor(
         public navCtrl: NavController,
         public alertCtrl: AlertController,
-        public gun: GunProvider
+        public gun: GunProvider,
+        public ngZone: NgZone
     ) {
         this.degrees = [];
         this.subscribeToDegreesInGun();
@@ -24,8 +25,10 @@ export class HomePage {
 
     private subscribeToDegreesInGun() {
         this.gun.loadCourses().subscribe(x => {
-            this.degrees = x.sort((a, b) => (a.name > b.name ? 1 : -1));
-            console.log(this.degrees);
+            this.ngZone.run(() => {
+                this.degrees = x.sort((a, b) => (a.name > b.name ? 1 : -1));
+                console.log(this.degrees);
+            });
         });
     }
 
