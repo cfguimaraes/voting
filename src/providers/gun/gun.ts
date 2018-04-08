@@ -3,7 +3,7 @@ import { Dexie } from "dexie";
 import { Observable } from "rxjs/Observable";
 import { Subscriber } from "rxjs/Subscriber";
 
-import { Entry, Upvote } from "../../models/Course";
+import { Entry } from "../../models/Course";
 
 declare function require(params: string);
 
@@ -19,7 +19,7 @@ export class GunProvider {
         let Dexie = require("dexie").default;
 
         this.entries = [];
-        this.db = new Dexie("6");
+        this.db = new Dexie("7");
         this.db.version(1).stores({
             entries: "name",
             tracker: "email"
@@ -37,6 +37,7 @@ export class GunProvider {
     }
 
     loadCourses(): Observable<Entry[]> {
+        let entry = new Entry("never go to view");
         return new Observable(s => {
             this.table_entries.toArray().then(r => {
                 this.entries = r;
@@ -52,8 +53,6 @@ export class GunProvider {
         });
 
         this.table_entries.hook("updating", (obj: Entry, pk, transaction) => {
-            console.log("updating", obj, pk);
-
             let entry = this.entries.find(x => x.name == pk);
             entry.upvotes = obj.upvotes;
             s.next(this.entries);
@@ -80,47 +79,32 @@ export class GunProvider {
                 tracker => {
                     if (tracker) {
                         // Data exists
-                        console.log("exists", tracker);
 
                         // Remove track information
-                        this.table_entries.get(tracker.name).then(rehydrated => {
-                            console.log("find", rehydrated);
-
-                            let upvote = rehydrated.upvotes.find(
-                                x => x.email == email
-                            );
-
-                            console.log("rehydrated", rehydrated)
-
-                            upvote.vote = 0;
-                            this.table_entries
-                                .update(tracker.name, rehydrated)
-                                .then(() => console.log("updated"));
-                        });
+                        this.table_entries
+                            .get(tracker.name)
+                            .then(rehydrated => {
+                                delete rehydrated.upvotes[email];
+                                this.table_entries.update(
+                                    tracker.name,
+                                    rehydrated
+                                );
+                            });
 
                         this.table_tracker.delete(email);
-                    } else {
-                        console.log("data doesn't exists");
                     }
                 }
                 // let commit
             )
             .finally(() => {
-                console.log("called");
-
                 // Increment upvote information
-                let upvote = new Upvote(email);
-                entry.upvotes.push(upvote);
-                this.table_entries.update(entry.name, entry).then(x => {
-                    console.log("upvote inserted");
 
+                entry.upvotes[email] = 1;
+                this.table_entries.update(entry.name, entry).then(x => {
                     // track information of email that upvoted
                     let tracker = { email, name: entry.name };
-                    console.log("tracker", tracker);
 
-                    this.table_tracker.add(tracker).then(x => {
-                        console.log("updated info about tracker");
-                    });
+                    this.table_tracker.add(tracker).then(x => {});
                 });
             });
     }

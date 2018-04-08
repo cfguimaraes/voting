@@ -27,7 +27,6 @@ export class HomePage {
         this.gun.loadCourses().subscribe(x => {
             this.ngZone.run(() => {
                 this.degrees = x.sort((a, b) => (a.name > b.name ? 1 : -1));
-                console.log(this.degrees);
             });
         });
     }

@@ -18,12 +18,12 @@ export class UpvotesPage {
 
     loadEntries() {
         this.gun.loadCourses().subscribe(x => {
-            this.entries = 
-            x.sort(
-                (a,b) => {
-                    return b.upvotes.length - a.upvotes.length
-                }
-            )
+            this.entries = x.sort((a, b) => {
+                return this.sumUpvotes(b) - this.sumUpvotes(a);
+            });
+            console.log(this.entries);
         });
     }
+    
+    sumUpvotes = (entry: Entry) => Object.keys(entry.upvotes).length;
 }
