@@ -1,11 +1,7 @@
 const port =
-    process.env.OPENSHIFT_NODEJS_PORT ||
-    process.env.VCAP_APP_PORT ||
     process.env.PORT ||
     process.argv[2] ||
     8080;
-
-// import { peers } from "./src/config/peers";
 
 
 var express  = require('express');
@@ -26,6 +22,6 @@ app.use(function(req, res, next) {
  
 app.use(express.static('www'));
 app.set('port', port);
-app.listen(app.get('port'), function () {
-  console.log('Express server listening on port ' + app.get('port'));
+app.listen(port, function () {
+  console.log('Express server listening on port ' + port);
 });
