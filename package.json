@@ -11,7 +11,7 @@
         "lint": "ionic-app-scripts lint",
         "ionic:build": "ionic-app-scripts build",
         "ionic:serve": "ionic-app-scripts serve",
-        "start": "ionic-app-scripts serve"
+        "start": "node server.js"
     },
     "config": {},
     "dependencies": {
