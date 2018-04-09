@@ -5,7 +5,7 @@ const port =
     process.argv[2] ||
     8080;
 
-import { peers } from "./src/config/peers";
+// import { peers } from "./src/config/peers";
 
 
 var express  = require('express');
