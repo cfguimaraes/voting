@@ -1,14 +1,14 @@
-import { ErrorHandler, NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { SplashScreen } from "@ionic-native/splash-screen";
-import { StatusBar } from "@ionic-native/status-bar";
-import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
+import { ErrorHandler, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
-import { HomePage } from "../pages/home/home";
-import { TabsPage } from "../pages/tabs/tabs";
-import { UpvotesPage } from "../pages/upvotes/upvotes";
-import { GunProvider } from "../providers/gun/gun";
-import { MyApp } from "./app.component";
+import { HomePage } from '../pages/home/home';
+import { TabsPage } from '../pages/tabs/tabs';
+import { UpvotesPage } from '../pages/upvotes/upvotes';
+import { GunProvider } from '../providers/gun/gun';
+import { MyApp } from './app.component';
 
 @NgModule({
     declarations: [MyApp, TabsPage, HomePage, UpvotesPage],

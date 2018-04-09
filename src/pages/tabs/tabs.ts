@@ -1,10 +1,8 @@
-import { Component } from "@angular/core";
-import { IonicPage } from "ionic-angular";
+import { Component } from '@angular/core';
 
-import { HomePage } from "./../home/home";
-import { UpvotesPage } from "./../upvotes/upvotes";
+import { HomePage } from '../home/home';
+import { UpvotesPage } from '../upvotes/upvotes';
 
-@IonicPage()
 @Component({
     selector: "page-tabs",
     templateUrl: "tabs.html"

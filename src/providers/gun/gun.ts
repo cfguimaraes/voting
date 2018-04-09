@@ -37,7 +37,6 @@ export class GunProvider {
     }
 
     loadCourses(): Observable<Entry[]> {
-        let entry = new Entry("never go to view");
         return new Observable(s => {
             this.table_entries.toArray().then(r => {
                 this.entries = r;

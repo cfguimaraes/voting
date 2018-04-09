@@ -1,10 +1,8 @@
 import { Component } from "@angular/core";
-import { IonicPage } from "ionic-angular";
 
-import { GunProvider } from "./../../providers/gun/gun";
 import { Entry } from "../../models/Course";
+import { GunProvider } from "./../../providers/gun/gun";
 
-@IonicPage()
 @Component({
     selector: "page-upvotes",
     templateUrl: "upvotes.html"
@@ -24,6 +22,6 @@ export class UpvotesPage {
             console.log(this.entries);
         });
     }
-    
+
     sumUpvotes = (entry: Entry) => Object.keys(entry.upvotes).length;
 }

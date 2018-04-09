@@ -6,41 +6,26 @@ const port =
     8080;
 
 import { peers } from "./src/config/peers";
-const Server = require("synceddb-server");
 
-// Persistence in memory
-//const MemoryPersistence = require('synceddb-persistence-memory');
-// const memoryPersistence = require('../../persistence/memory');
 
-// Persistence with PostreSQL
-const pgPersistence = require("synceddb-persistence-postgres");
-const pgOpts = {
-    conString: peers[0]
-};
-
-// Persistence with MySQL
-//const mysqlPersistence = require('synceddb-persistence-mysql');
-//const mysqlPersistence = require('../../persistence/mysql');
-//const mysqlOpts = {
-//  host: 'localhost',
-//  user: 'synceddb',
-//  password: 'mypass',
-//  database: 'synceddb',
-//};
-
-// Persistence with CouchDB
-//const mysqlPersistence = require('synceddb-persistence-couchdb');
-//const couchdbPersistence = require('../../persistence/couchdb');
-//const couchdbOpts = {
-//  dbUrl: 'http://synceddb:mypass@localhost:5984/synceddb/',
-//};
-
-// memoryPersistence.create().then(function(p) {
-// //mysqlPersistence.create(mysqlOpts).then(function(p) {
-// //couchdbPersistence.create(couchdbOpts).then(function(p) {
-pgPersistence.create(pgOpts).then(function(p) {
-    new Server({
-        port: port,
-        store: p
-    });
+var express  = require('express');
+var app      = express();                               
+var bodyParser = require('body-parser');    
+var cors = require('cors');
+ 
+app.use(bodyParser.urlencoded({'extended':'true'}));            
+app.use(bodyParser.json());                                     
+app.use(cors());
+ 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'DELETE, PUT');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+ 
+app.use(express.static('www'));
+app.set('port', port);
+app.listen(app.get('port'), function () {
+  console.log('Express server listening on port ' + app.get('port'));
 });
